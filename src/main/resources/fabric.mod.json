@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "wjddkrs_pkcs",
+  "version": "${version}",
+  "name": "Wjddkr's PKCS",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/wjddkrs_pkcs/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "io.github.wjddkr.wjddkrs_pkcs.client.Wjddkrs_pkcsDataGenerator"
+    ],
+    "client": [
+      "io.github.wjddkr.wjddkrs_pkcs.client.Wjddkrs_pkcsClient"
+    ],
+    "main": [
+      "io.github.wjddkr.wjddkrs_pkcs.Wjddkrs_pkcs"
+    ]
+  },
+  "mixins": [
+    "wjddkrs_pkcs.mixins.json",
+    {
+      "config": "wjddkrs_pkcs.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "pehkui": "*"
+  }
+}
