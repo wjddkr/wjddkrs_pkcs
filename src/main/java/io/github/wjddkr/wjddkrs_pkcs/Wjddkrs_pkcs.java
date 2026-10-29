@@ -4,12 +4,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleTypes;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -19,6 +16,16 @@ import net.minecraft.resources.Identifier;
 
 
 public class Wjddkrs_pkcs implements ModInitializer {
+
+    private static final net.fabricmc.fabric.api.attachment.v1.AttachmentType<Boolean>
+            SCALE_DECIDED =
+            net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry.createPersistent(
+                    Identifier.fromNamespaceAndPath(
+                            "wjddkrs_pkcs",
+                            "scale_decided"
+                    ),
+                    com.mojang.serialization.Codec.BOOL
+            );
 
     @Override
     public void onInitialize() {
@@ -34,18 +41,16 @@ public class Wjddkrs_pkcs implements ModInitializer {
         ServerEntityEvents.ENTITY_LOAD.register((entity, server) -> {
 
             if (server.getRandom().nextFloat() < 0.99f &&
-                    entity.spawnReason() != EntitySpawnReason.LOAD &&
+                    !Boolean.TRUE.equals(entity.getAttached(SCALE_DECIDED)) &&
                     entity.spawnReason() != EntitySpawnReason.BREEDING &&
-                    entity.spawnReason() != EntitySpawnReason.DIMENSION_TRAVEL &&
                     entity.getType() != EntityType.END_CRYSTAL) {
 
                 var scaleData = ScaleTypes.BASE.getScaleData(entity);
 
                 scaleData.setScaleTickDelay(0);
                 scaleData.setScale(0.0625f);
-
-                System.out.println(entity.getType() + " / " + entity.spawnReason());
             }
+            entity.setAttached(SCALE_DECIDED, true);
         });
 
         // 커맨드 /chisel
@@ -99,6 +104,4 @@ public class Wjddkrs_pkcs implements ModInitializer {
                 }
         );
     }
-    }
-
-
+}
